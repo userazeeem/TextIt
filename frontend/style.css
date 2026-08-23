@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #000;
@@ -13,7 +12,9 @@ body {
 }
 
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 header {
     height: 80px;
@@ -24,7 +25,6 @@ header {
     align-items: center;
     justify-content: space-between;
 }
-
 
 .logo {
     font-size: 20px;
@@ -38,14 +38,15 @@ header {
     padding: 5px 7px;
 }
 
-
 .header-right {
     color: #888;
     font-size: 13px;
 }
 
 
-/* MAIN */
+/* =========================
+   MAIN
+========================= */
 
 main {
     width: 86%;
@@ -54,13 +55,14 @@ main {
 }
 
 
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .hero {
     text-align: center;
     padding: 90px 20px 60px;
 }
-
 
 .small-title {
     color: #777;
@@ -69,18 +71,15 @@ main {
     margin-bottom: 20px;
 }
 
-
 .hero h1 {
     font-size: clamp(45px, 7vw, 90px);
     line-height: 0.95;
     letter-spacing: -4px;
 }
 
-
 .hero h1 span {
     color: #777;
 }
-
 
 .description {
     margin-top: 25px;
@@ -89,20 +88,33 @@ main {
 }
 
 
-/* TRANSLATOR */
+/* =========================
+   TRANSLATOR
+========================= */
 
 .translator {
     display: grid;
+
     grid-template-columns: 420px 50px 420px;
+
     align-items: center;
     justify-content: center;
+
     gap: 15px;
 }
 
+
+/* =========================
+   TRANSLATION BOX
+========================= */
+
 .translation-box {
-    height: 210px;
+    height: 200px;
+
     border: 1px solid #333;
+
     background: #080808;
+
     transition: 0.3s;
 }
 
@@ -111,29 +123,90 @@ main {
 }
 
 
-/* HEADER */
+/* =========================
+   BOX HEADER
+========================= */
 
 .box-header {
     height: 45px;
+
     padding: 0 15px;
+
     border-bottom: 1px solid #292929;
 
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 }
 
 
-/* INPUT */
+/* =========================
+   LANGUAGE SELECT
+========================= */
+
+select {
+    background: transparent;
+
+    color: #fff;
+
+    border: none;
+
+    outline: none;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+select option {
+    background: #111;
+
+    color: white;
+}
+
+
+/* =========================
+   HEADER BUTTON
+========================= */
+
+.box-header button {
+    background: none;
+
+    border: none;
+
+    color: #777;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+.box-header button:hover {
+    color: white;
+}
+
+
+/* =========================
+   INPUT TEXTAREA
+========================= */
 
 textarea {
     width: 100%;
-    height: 130px;
+
+    height: 120px;
 
     background: transparent;
+
     color: white;
 
     border: none;
+
     outline: none;
 
     resize: none;
@@ -141,116 +214,8 @@ textarea {
     padding: 15px;
 
     font-size: 15px;
+
     line-height: 1.5;
-}
-
-
-/* OUTPUT */
-
-.output {
-    height: 130px;
-
-    padding: 15px;
-
-    color: #aaa;
-    font-size: 15px;
-    line-height: 1.5;
-
-    overflow-y: auto;
-}
-
-
-/* FOOTER */
-
-.box-footer {
-    height: 35px;
-
-    border-top: 1px solid #292929;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 15px;
-
-    color: #555;
-    font-size: 11px;
-}
-
-
-/* BOX */
-
-.translation-box {
-    border: 1px solid #333;
-    background: #080808;
-    transition: 0.3s;
-}
-
-
-.translation-box:hover {
-    border-color: #777;
-}
-
-
-.box-header {
-    height: 60px;
-    padding: 0 18px;
-    border-bottom: 1px solid #292929;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-
-select {
-    background: transparent;
-    color: #fff;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-
-select option {
-    background: #111;
-    color: white;
-}
-
-
-.box-header button {
-    background: none;
-    border: none;
-    color: #777;
-    cursor: pointer;
-    font-size: 11px;
-    letter-spacing: 1px;
-}
-
-
-.box-header button:hover {
-    color: white;
-}
-
-
-/* TEXTAREA */
-textarea {
-    height: 120px;
-    padding: 15px;
-}
-
-.output {
-    height: 120px;
-    padding: 15px;
-}
-
-.box-header {
-    height: 45px;
-}
-
-.box-footer {
-    height: 35px;
 }
 
 textarea::placeholder {
@@ -258,41 +223,53 @@ textarea::placeholder {
 }
 
 
-/* OUTPUT */
+/* =========================
+   OUTPUT
+========================= */
 
 .output {
-    height: 260px;
-    padding: 25px;
+    height: 120px;
+
+    padding: 15px;
 
     color: #aaa;
-    font-size: 17px;
-    line-height: 1.6;
+
+    font-size: 15px;
+
+    line-height: 1.5;
 
     overflow-y: auto;
 }
 
 
-/* FOOTER */
+/* =========================
+   BOX FOOTER
+========================= */
 
 .box-footer {
-    height: 45px;
+    height: 35px;
 
     border-top: 1px solid #292929;
 
     display: flex;
+
     align-items: center;
 
-    padding: 0 18px;
+    padding: 0 15px;
 
     color: #555;
+
     font-size: 11px;
 }
 
 
-/* SWAP */
+/* =========================
+   SWAP BUTTON
+========================= */
 
 .swap-btn {
     width: 50px;
+
     height: 50px;
 
     border-radius: 50%;
@@ -300,6 +277,7 @@ textarea::placeholder {
     border: 1px solid #444;
 
     background: #fff;
+
     color: #000;
 
     font-size: 24px;
@@ -309,17 +287,20 @@ textarea::placeholder {
     transition: 0.3s;
 }
 
-
 .swap-btn:hover {
     background: #000;
+
     color: #fff;
+
     border-color: #fff;
 
     transform: rotate(180deg);
 }
 
 
-/* TRANSLATE BUTTON */
+/* =========================
+   TRANSLATE BUTTON
+========================= */
 
 .translate-btn {
     display: block;
@@ -327,14 +308,17 @@ textarea::placeholder {
     margin: 35px auto 0;
 
     min-width: 200px;
+
     height: 55px;
 
     border: none;
 
     background: white;
+
     color: black;
 
     font-weight: bold;
+
     letter-spacing: 2px;
 
     cursor: pointer;
@@ -342,27 +326,30 @@ textarea::placeholder {
     transition: 0.3s;
 }
 
-
 .translate-btn:hover {
     background: #ccc;
+
     transform: translateY(-3px);
 }
-
 
 .translate-btn:active {
     transform: translateY(0);
 }
 
 
-/* LOADER */
+/* =========================
+   LOADER
+========================= */
 
 .loader {
     display: none;
 
     width: 15px;
+
     height: 15px;
 
     border: 2px solid #777;
+
     border-top-color: #000;
 
     border-radius: 50%;
@@ -370,20 +357,20 @@ textarea::placeholder {
     animation: spin 0.7s linear infinite;
 }
 
-
 @keyframes spin {
-
     to {
         transform: rotate(360deg);
     }
-
 }
 
 
-/* FEATURES */
+/* =========================
+   FEATURES
+========================= */
 
 .features {
     display: grid;
+
     grid-template-columns: repeat(3, 1fr);
 
     border-top: 1px solid #292929;
@@ -391,32 +378,32 @@ textarea::placeholder {
     margin-top: 90px;
 }
 
-
 .features div {
     padding: 25px;
 
     border-right: 1px solid #292929;
 }
 
-
 .features div:last-child {
     border-right: none;
 }
 
-
 .features strong {
     font-size: 12px;
+
     color: #555;
 }
 
-
 .features p {
     margin-top: 8px;
+
     font-size: 14px;
 }
 
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 footer {
     margin-top: 80px;
@@ -426,6 +413,7 @@ footer {
     border-top: 1px solid #292929;
 
     display: flex;
+
     justify-content: space-between;
 
     color: #555;
@@ -434,9 +422,11 @@ footer {
 }
 
 
-/* RESPONSIVE */
+/* =========================
+   RESPONSIVE
+========================= */
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
 
     .translator {
         grid-template-columns: 1fr;
@@ -446,18 +436,81 @@ footer {
         margin: auto;
     }
 
+    .translation-box {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+    }
+
     .features {
         grid-template-columns: 1fr;
     }
 
     .features div {
         border-right: none;
+
         border-bottom: 1px solid #292929;
     }
 
     footer {
         flex-direction: column;
+
         gap: 10px;
     }
+}
 
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 5%;
+    }
+
+    .header-right {
+        display: none;
+    }
+
+    main {
+        width: 92%;
+    }
+
+    .hero {
+        padding: 60px 10px 40px;
+    }
+
+    .hero h1 {
+        font-size: 50px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .translator {
+        grid-template-columns: 1fr;
+    }
+
+    .translation-box {
+        height: 200px;
+    }
+
+    textarea {
+        height: 120px;
+    }
+
+    .output {
+        height: 120px;
+    }
+
+    .features {
+        margin-top: 60px;
+    }
+
+    footer {
+        margin-top: 50px;
+    }
 }
