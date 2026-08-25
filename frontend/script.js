@@ -1,49 +1,29 @@
 import { pipeline } from
     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
 
-const inputText =
-    document.getElementById("inputText");
+const inputText = document.getElementById("inputText");
+const outputText = document.getElementById("outputText");
 
-const outputText =
-    document.getElementById("outputText");
+const sourceLanguage = document.getElementById("sourceLanguage");
+const targetLanguage = document.getElementById("targetLanguage");
 
-const sourceLanguage =
-    document.getElementById("sourceLanguage");
+const translateBtn = document.getElementById("translateBtn");
+const swapBtn = document.getElementById("swapBtn");
+const clearBtn = document.getElementById("clearBtn");
+const copyBtn = document.getElementById("copyBtn");
 
-const targetLanguage =
-    document.getElementById("targetLanguage");
+const charCount = document.getElementById("charCount");
+const status = document.getElementById("status");
 
-const translateBtn =
-    document.getElementById("translateBtn");
-
-const swapBtn =
-    document.getElementById("swapBtn");
-
-const clearBtn =
-    document.getElementById("clearBtn");
-
-const copyBtn =
-    document.getElementById("copyBtn");
-
-const charCount =
-    document.getElementById("charCount");
-
-const status =
-    document.getElementById("status");
-
-const loader =
-    document.getElementById("loader");
-
-const buttonText =
-    document.getElementById("buttonText");
-
+const loader = document.getElementById("loader");
+const buttonText = document.getElementById("buttonText");
 
 let translator = null;
 
 
-// =============================
+// ============================
 // CHARACTER COUNT
-// =============================
+// ============================
 
 inputText.addEventListener("input", () => {
 
@@ -53,9 +33,9 @@ inputText.addEventListener("input", () => {
 });
 
 
-// =============================
+// ============================
 // CLEAR
-// =============================
+// ============================
 
 clearBtn.addEventListener("click", () => {
 
@@ -67,38 +47,34 @@ clearBtn.addEventListener("click", () => {
     charCount.textContent =
         "0 / 1000";
 
-    status.textContent =
-        "Ready";
+    status.textContent = "Ready";
 
 });
 
 
-// =============================
+// ============================
 // SWAP
-// =============================
+// ============================
 
 swapBtn.addEventListener("click", () => {
 
-    const oldSource =
-        sourceLanguage.value;
+    const source = sourceLanguage.value;
 
     sourceLanguage.value =
         targetLanguage.value;
 
-    targetLanguage.value =
-        oldSource;
+    targetLanguage.value = source;
 
 });
 
 
-// =============================
+// ============================
 // COPY
-// =============================
+// ============================
 
 copyBtn.addEventListener("click", async () => {
 
-    const text =
-        outputText.textContent;
+    const text = outputText.textContent;
 
     if (
         !text ||
@@ -128,17 +104,17 @@ copyBtn.addEventListener("click", async () => {
 });
 
 
-// =============================
-// LOAD MODEL
-// =============================
+// ============================
+// LOAD TRANSLATION MODEL
+// ============================
 
 async function loadTranslator() {
 
     status.textContent =
-        "Loading translation model...";
+        "Loading model...";
 
     outputText.textContent =
-        "First-time setup may take a moment...";
+        "Downloading translation model...";
 
 
     translator = await pipeline(
@@ -153,86 +129,84 @@ async function loadTranslator() {
 }
 
 
-// =============================
+// ============================
 // TRANSLATE
-// =============================
+// ============================
 
-translateBtn.addEventListener(
-    "click",
-    async () => {
+translateBtn.addEventListener("click", async () => {
 
-        const text =
-            inputText.value.trim();
+    const text = inputText.value.trim();
 
 
-        if (!text) {
+    if (!text) {
 
-            outputText.textContent =
-                "Please enter some text first.";
+        outputText.textContent =
+            "Please enter some text first.";
 
-            return;
-
-        }
-
-
-        buttonText.style.display =
-            "none";
-
-        loader.style.display =
-            "inline-block";
-
-        status.textContent =
-            "Translating...";
-
-
-        try {
-
-            /*
-             * Current model:
-             *
-             * English → French
-             *
-             * We'll add more language
-             * models next.
-             */
-
-            if (!translator) {
-
-                await loadTranslator();
-
-            }
-
-
-            const result =
-                await translator(text);
-
-
-            outputText.textContent =
-                result[0].translation_text;
-
-            status.textContent =
-                "Translated";
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            outputText.textContent =
-                "Translation failed.";
-
-            status.textContent =
-                "Error";
-
-        } finally {
-
-            buttonText.style.display =
-                "inline";
-
-            loader.style.display =
-                "none";
-
-        }
+        return;
 
     }
-);
+
+
+    // This model supports English → French
+
+    if (
+        sourceLanguage.value !== "en" ||
+        targetLanguage.value !== "fr"
+    ) {
+
+        outputText.textContent =
+            "For now, please select English → French.";
+
+        status.textContent =
+            "Language not supported";
+
+        return;
+
+    }
+
+
+    buttonText.style.display = "none";
+    loader.style.display = "inline-block";
+
+    status.textContent =
+        "Translating...";
+
+
+    try {
+
+        if (!translator) {
+
+            await loadTranslator();
+
+        }
+
+
+        const result =
+            await translator(text);
+
+
+        outputText.textContent =
+            result[0].translation_text;
+
+        status.textContent =
+            "Translated";
+
+
+    } catch (error) {
+
+        console.error("Translation error:", error);
+
+        outputText.textContent =
+            "Translation failed. Check the browser console.";
+
+        status.textContent =
+            "Error";
+
+    }
+
+
+    buttonText.style.display = "inline";
+    loader.style.display = "none";
+
+});
