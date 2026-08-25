@@ -1,5 +1,11 @@
-const inputText = document.getElementById("inputText");
-const outputText = document.getElementById("outputText");
+import { pipeline } from
+    "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
+
+const inputText =
+    document.getElementById("inputText");
+
+const outputText =
+    document.getElementById("outputText");
 
 const sourceLanguage =
     document.getElementById("sourceLanguage");
@@ -32,7 +38,12 @@ const buttonText =
     document.getElementById("buttonText");
 
 
+let translator = null;
+
+
+// =============================
 // CHARACTER COUNT
+// =============================
 
 inputText.addEventListener("input", () => {
 
@@ -42,7 +53,9 @@ inputText.addEventListener("input", () => {
 });
 
 
+// =============================
 // CLEAR
+// =============================
 
 clearBtn.addEventListener("click", () => {
 
@@ -56,25 +69,31 @@ clearBtn.addEventListener("click", () => {
 
     status.textContent =
         "Ready";
+
 });
 
 
+// =============================
 // SWAP
+// =============================
 
 swapBtn.addEventListener("click", () => {
 
-    const source = sourceLanguage.value;
+    const oldSource =
+        sourceLanguage.value;
 
     sourceLanguage.value =
         targetLanguage.value;
 
     targetLanguage.value =
-        source;
+        oldSource;
 
 });
 
 
+// =============================
 // COPY
+// =============================
 
 copyBtn.addEventListener("click", async () => {
 
@@ -95,7 +114,9 @@ copyBtn.addEventListener("click", async () => {
         copyBtn.textContent = "COPIED";
 
         setTimeout(() => {
+
             copyBtn.textContent = "COPY";
+
         }, 1500);
 
     } catch (error) {
@@ -103,108 +124,115 @@ copyBtn.addEventListener("click", async () => {
         console.error(error);
 
     }
+
 });
 
 
+// =============================
+// LOAD MODEL
+// =============================
+
+async function loadTranslator() {
+
+    status.textContent =
+        "Loading translation model...";
+
+    outputText.textContent =
+        "First-time setup may take a moment...";
+
+
+    translator = await pipeline(
+        "translation",
+        "Xenova/opus-mt-en-fr"
+    );
+
+
+    status.textContent =
+        "Model ready";
+
+}
+
+
+// =============================
 // TRANSLATE
+// =============================
 
-translateBtn.addEventListener("click", async () => {
+translateBtn.addEventListener(
+    "click",
+    async () => {
 
-    const text =
-        inputText.value.trim();
-
-    if (!text) {
-
-        outputText.textContent =
-            "Please enter some text first.";
-
-        return;
-    }
+        const text =
+            inputText.value.trim();
 
 
-    if (
-        sourceLanguage.value ===
-        targetLanguage.value
-    ) {
+        if (!text) {
 
-        outputText.textContent = text;
+            outputText.textContent =
+                "Please enter some text first.";
 
-        status.textContent = "Ready";
+            return;
 
-        return;
-    }
-
-
-    // Loading
-
-    buttonText.style.display = "none";
-    loader.style.display = "inline-block";
-
-    status.textContent = "Translating...";
-
-
-    try {
-
-        const response = await fetch(
-            "http://localhost:5000/api/translate",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    text: text,
-
-                    source:
-                        sourceLanguage.value,
-
-                    target:
-                        targetLanguage.value
-
-                })
-            }
-        );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "Translation failed."
-            );
         }
 
 
-        outputText.textContent =
-            data.translatedText;
-
-        status.textContent =
-            "Translated";
-
-    } catch (error) {
-
-        console.error(error);
-
-        outputText.textContent =
-            error.message;
-
-        status.textContent =
-            "Error";
-
-    } finally {
-
         buttonText.style.display =
-            "inline";
+            "none";
 
         loader.style.display =
-            "none";
-    }
+            "inline-block";
 
-});
+        status.textContent =
+            "Translating...";
+
+
+        try {
+
+            /*
+             * Current model:
+             *
+             * English → French
+             *
+             * We'll add more language
+             * models next.
+             */
+
+            if (!translator) {
+
+                await loadTranslator();
+
+            }
+
+
+            const result =
+                await translator(text);
+
+
+            outputText.textContent =
+                result[0].translation_text;
+
+            status.textContent =
+                "Translated";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            outputText.textContent =
+                "Translation failed.";
+
+            status.textContent =
+                "Error";
+
+        } finally {
+
+            buttonText.style.display =
+                "inline";
+
+            loader.style.display =
+                "none";
+
+        }
+
+    }
+);
