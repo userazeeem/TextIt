@@ -1,29 +1,58 @@
 import { pipeline } from
     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
 
-const inputText = document.getElementById("inputText");
-const outputText = document.getElementById("outputText");
 
-const sourceLanguage = document.getElementById("sourceLanguage");
-const targetLanguage = document.getElementById("targetLanguage");
+// =============================
+// ELEMENTS
+// =============================
 
-const translateBtn = document.getElementById("translateBtn");
-const swapBtn = document.getElementById("swapBtn");
-const clearBtn = document.getElementById("clearBtn");
-const copyBtn = document.getElementById("copyBtn");
+const inputText =
+    document.getElementById("inputText");
 
-const charCount = document.getElementById("charCount");
-const status = document.getElementById("status");
+const outputText =
+    document.getElementById("outputText");
 
-const loader = document.getElementById("loader");
-const buttonText = document.getElementById("buttonText");
+const sourceLanguage =
+    document.getElementById("sourceLanguage");
+
+const targetLanguage =
+    document.getElementById("targetLanguage");
+
+const translateBtn =
+    document.getElementById("translateBtn");
+
+const swapBtn =
+    document.getElementById("swapBtn");
+
+const clearBtn =
+    document.getElementById("clearBtn");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const charCount =
+    document.getElementById("charCount");
+
+const status =
+    document.getElementById("status");
+
+const loader =
+    document.getElementById("loader");
+
+const buttonText =
+    document.getElementById("buttonText");
+
+
+// =============================
+// MODEL
+// =============================
 
 let translator = null;
 
 
-// ============================
+// =============================
 // CHARACTER COUNT
-// ============================
+// =============================
 
 inputText.addEventListener("input", () => {
 
@@ -33,9 +62,9 @@ inputText.addEventListener("input", () => {
 });
 
 
-// ============================
+// =============================
 // CLEAR
-// ============================
+// =============================
 
 clearBtn.addEventListener("click", () => {
 
@@ -47,34 +76,38 @@ clearBtn.addEventListener("click", () => {
     charCount.textContent =
         "0 / 1000";
 
-    status.textContent = "Ready";
+    status.textContent =
+        "Ready";
 
 });
 
 
-// ============================
+// =============================
 // SWAP
-// ============================
+// =============================
 
 swapBtn.addEventListener("click", () => {
 
-    const source = sourceLanguage.value;
+    const source =
+        sourceLanguage.value;
 
     sourceLanguage.value =
         targetLanguage.value;
 
-    targetLanguage.value = source;
+    targetLanguage.value =
+        source;
 
 });
 
 
-// ============================
+// =============================
 // COPY
-// ============================
+// =============================
 
 copyBtn.addEventListener("click", async () => {
 
-    const text = outputText.textContent;
+    const text =
+        outputText.textContent;
 
     if (
         !text ||
@@ -87,11 +120,13 @@ copyBtn.addEventListener("click", async () => {
 
         await navigator.clipboard.writeText(text);
 
-        copyBtn.textContent = "COPIED";
+        copyBtn.textContent =
+            "COPIED";
 
         setTimeout(() => {
 
-            copyBtn.textContent = "COPY";
+            copyBtn.textContent =
+                "COPY";
 
         }, 1500);
 
@@ -104,14 +139,14 @@ copyBtn.addEventListener("click", async () => {
 });
 
 
-// ============================
-// LOAD TRANSLATION MODEL
-// ============================
+// =============================
+// LOAD MODEL
+// =============================
 
 async function loadTranslator() {
 
     status.textContent =
-        "Loading model...";
+        "Loading AI model...";
 
     outputText.textContent =
         "Downloading translation model...";
@@ -119,94 +154,160 @@ async function loadTranslator() {
 
     translator = await pipeline(
         "translation",
-        "Xenova/opus-mt-en-fr"
+        "Xenova/nllb-200-distilled-600M"
     );
 
 
     status.textContent =
-        "Model ready";
+        "AI model ready";
 
 }
 
 
-// ============================
+// =============================
+// LANGUAGE CODES
+// =============================
+
+const languageCodes = {
+
+    en: "eng_Latn",
+
+    hi: "hin_Deva",
+
+    kn: "kan_Knda",
+
+    te: "tel_Telu",
+
+    ta: "tam_Taml",
+
+    ml: "mal_Mlym",
+
+    fr: "fra_Latn",
+
+    de: "deu_Latn",
+
+    es: "spa_Latn",
+
+    ja: "jpn_Jpan"
+
+};
+
+
+// =============================
 // TRANSLATE
-// ============================
+// =============================
 
-translateBtn.addEventListener("click", async () => {
+translateBtn.addEventListener(
+    "click",
+    async () => {
 
-    const text = inputText.value.trim();
-
-
-    if (!text) {
-
-        outputText.textContent =
-            "Please enter some text first.";
-
-        return;
-
-    }
+        const text =
+            inputText.value.trim();
 
 
-    // This model supports English → French
+        if (!text) {
 
-    if (
-        sourceLanguage.value !== "en" ||
-        targetLanguage.value !== "fr"
-    ) {
+            outputText.textContent =
+                "Please enter some text first.";
 
-        outputText.textContent =
-            "For now, please select English → French.";
-
-        status.textContent =
-            "Language not supported";
-
-        return;
-
-    }
-
-
-    buttonText.style.display = "none";
-    loader.style.display = "inline-block";
-
-    status.textContent =
-        "Translating...";
-
-
-    try {
-
-        if (!translator) {
-
-            await loadTranslator();
+            return;
 
         }
 
 
-        const result =
-            await translator(text);
+        const source =
+            sourceLanguage.value;
+
+        const target =
+            targetLanguage.value;
 
 
-        outputText.textContent =
-            result[0].translation_text;
+        // Same language
+
+        if (source === target) {
+
+            outputText.textContent =
+                text;
+
+            status.textContent =
+                "Same language";
+
+            return;
+
+        }
+
+
+        // Loading UI
+
+        buttonText.style.display =
+            "none";
+
+        loader.style.display =
+            "inline-block";
 
         status.textContent =
-            "Translated";
+            "Translating...";
 
 
-    } catch (error) {
+        try {
 
-        console.error("Translation error:", error);
+            // Load model
 
-        outputText.textContent =
-            "Translation failed. Check the browser console.";
+            if (!translator) {
 
-        status.textContent =
-            "Error";
+                await loadTranslator();
+
+            }
+
+
+            // Convert language codes
+
+            const sourceCode =
+                languageCodes[source];
+
+            const targetCode =
+                languageCodes[target];
+
+
+            // Translation
+
+            const result =
+                await translator(
+                    text,
+                    {
+                        src_lang: sourceCode,
+                        tgt_lang: targetCode
+                    }
+                );
+
+
+            outputText.textContent =
+                result[0].translation_text;
+
+
+            status.textContent =
+                "Translated";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            outputText.textContent =
+                "Translation failed.";
+
+            status.textContent =
+                "Error";
+
+        } finally {
+
+            buttonText.style.display =
+                "inline";
+
+            loader.style.display =
+                "none";
+
+        }
 
     }
-
-
-    buttonText.style.display = "inline";
-    loader.style.display = "none";
-
-});
+);
